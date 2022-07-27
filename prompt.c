@@ -4,16 +4,7 @@
 #include <string.h>
 
 
-typedef struct toklist
-{
-	char *str;
-	struct toklist *next;
-} toklist;
 
-
-toklist *add_node_end(toklist **head, const char *str);
-size_t print_list(const toklist *h);
-int free_list(toklist *head);
 
 
 /**
@@ -26,119 +17,57 @@ int free_list(toklist *head);
  */
 int main(void)
 {
+	size_t bufsize = 512;
 	char *buffer;
 	char *token;
-	size_t bufsize = 32;
-	toklist *words;
-    int i = 1;
+	char **args = malloc(bufsize * sizeof(char*));
+	int positions, i;
 
-    while (i)
-    {
+	do
+	{
+		if (!args)
+			exit (0);
+
    
-    	words = NULL;
+		i = 0;
+		positions = 0;
+   
+		   buffer = (char *)malloc(bufsize * sizeof(char));
+		   if( buffer == NULL)
+		   	exit(1);
 
-	    buffer = (char *)malloc(bufsize * sizeof(char));
-	    if( buffer == NULL)
-	    	exit(1);
+		/*  get a line from user  */
+		printf("$ ");
+		getline(&buffer, &bufsize, stdin);
+		
+		/*split these line and put in pointers array*/
+		token = strtok(buffer, " ");
+		while( token != NULL )
+		{	/*	args[positions] = malloc(sizeof(char) * sizeof(token) + 1); */
+			args[positions] = token;
+			if (args[positions] != NULL)
+			{
+				printf("in token position %d: %s\t\t\t", positions, token);
+				printf("in args position %d: %s\n", positions, args[positions]);
+			}
+			token = strtok(NULL, " ");	
+			positions++;
+		}
 
-	    printf("$ ");
-	    getline(&buffer, &bufsize, stdin);
+		args[positions] = NULL;
 
-	    token = strtok(buffer, " ");
-	    while( token != NULL )
-	    	{
-		    	add_node_end(&words, token);
-		    	token = strtok(NULL, " ");
-		    }
+		free(buffer);
 
-    	free(buffer);
-
-	    print_list(words);
-
-	    free_list(words);
-    }
+		
+		while (args[i] != NULL)
+		{
+			printf("in while loop position %d: %s\n", i, args[i]);
+			i++;
+		}
+		
+		free(args);
+		
+	} while (1);
+    
 	return(0);
-}
-
-
-/**
- *add_node_end - add new node to the end of the list
- *@head: new node
- *@str: item to node
- *Return: new node
- */
-toklist *add_node_end(toklist **head, const char *str)
-{
-	toklist *new;
-	toklist *last = *head;
-
-	new = malloc(sizeof(toklist));
-	if (new == NULL)
-		return (NULL);
-
-	new->str = strdup(str);
-	new->next = NULL;
-
-	if (*head == NULL)
-	{
-		*head = new;
-	}
-	else
-	{
-		while (last->next != NULL)
-			last = last->next;
-
-		last->next = new;
-	}
-	return (new);
-}
-
-
-/**
- *print_list - print list items
- *@h: nodo
- *Return: counter
- */
-size_t print_list(const toklist *h)
-{
-	size_t counter = 0;
-	const toklist *tmp = h;
-
-	while (tmp)
-	{
-		if (tmp->str == NULL)
-		{
-			printf("[0] (nil)\n");
-		}
-		else
-		{
-			printf("%s\n", tmp->str);
-		}
-		tmp = tmp->next;
-		counter++;
-	}
-	return (counter);
-}
-
-
-/**
- *free_list - free the list
- *@head: list start
- *Return: alwais 0
- */
-int free_list(toklist *head)
-{
-	toklist *tmp;
-
-	if (head != NULL)
-	{
-		while (head)
-		{
-			tmp = head->next;
-			free(head->str);
-			free(head);
-			head = tmp;
-		}
-	}
-	return (0);
 }
