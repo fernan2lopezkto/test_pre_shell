@@ -4,7 +4,6 @@
 #include <string.h>
 
 
-
 typedef struct toklist
 {
 	char *str;
@@ -12,9 +11,7 @@ typedef struct toklist
 } toklist;
 
 
-
 toklist *add_node_end(toklist **head, const char *str);
-
 size_t print_list(const toklist *h);
 int free_list(toklist *head);
 
@@ -33,29 +30,33 @@ int main(void)
 	char *token;
 	size_t bufsize = 32;
 	toklist *words;
+    int i = 1;
 
-	words = NULL;
+    while (i)
+    {
+   
+    	words = NULL;
 
-	buffer = (char *)malloc(bufsize * sizeof(char));
-	if( buffer == NULL)
-		exit(1);
+	    buffer = (char *)malloc(bufsize * sizeof(char));
+	    if( buffer == NULL)
+	    	exit(1);
 
-	printf("$ ");
-	getline(&buffer, &bufsize, stdin);
+	    printf("$ ");
+	    getline(&buffer, &bufsize, stdin);
 
-	token = strtok(buffer, " ");
-	while( token != NULL )
-		{
-			add_node_end(&words, token);
-			token = strtok(NULL, " ");
-		}
+	    token = strtok(buffer, " ");
+	    while( token != NULL )
+	    	{
+		    	add_node_end(&words, token);
+		    	token = strtok(NULL, " ");
+		    }
 
-	free(buffer);
+    	free(buffer);
 
-	print_list(words);
+	    print_list(words);
 
-	free_list(words);
-
+	    free_list(words);
+    }
 	return(0);
 }
 
@@ -64,7 +65,7 @@ int main(void)
  *add_node_end - add new node to the end of the list
  *@head: new node
  *@str: item to node
- *Return: list_t
+ *Return: new node
  */
 toklist *add_node_end(toklist **head, const char *str)
 {
@@ -93,14 +94,10 @@ toklist *add_node_end(toklist **head, const char *str)
 }
 
 
-
-
-
-
 /**
  *print_list - print list items
  *@h: nodo
- *Return: size_t
+ *Return: counter
  */
 size_t print_list(const toklist *h)
 {
@@ -124,15 +121,10 @@ size_t print_list(const toklist *h)
 }
 
 
-
-
-
-
-
 /**
  *free_list - free the list
  *@head: list start
- *Return:void
+ *Return: alwais 0
  */
 int free_list(toklist *head)
 {
